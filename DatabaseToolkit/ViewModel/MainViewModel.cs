@@ -1,4 +1,5 @@
 ﻿using DatabaseToolkit.Model;
+using DatabaseToolkit.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,7 +38,7 @@ namespace DatabaseToolkit.ViewModel
 
         private void OpenMenuCommand()
         {
-            throw new NotImplementedException();
+
         }
 
         public MainViewModel()

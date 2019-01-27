@@ -15,20 +15,13 @@ using System.Windows.Shapes;
 namespace DatabaseToolkit.View
 {
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class MainView : Window
+    public partial class SettingsView : Window
     {
-        public MainView()
+        public SettingsView()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var window = new SettingsView();
-            window.Owner = this;
-            window.Show();
         }
     }
 }

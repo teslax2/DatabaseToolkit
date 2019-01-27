@@ -67,6 +67,7 @@
     </ApplicationDefinition>
     <Compile Include="ViewModel\CommandHandler.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
     <Compile Include="View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -77,7 +78,14 @@
     <Compile Include="Interface\IDatabaseFilter.cs" />
     <Compile Include="Interface\IDateBaseOperations.cs" />
     <Compile Include="Interface\ISeedDateBase.cs" />
+    <Compile Include="View\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
