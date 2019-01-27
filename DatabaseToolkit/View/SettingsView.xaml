@@ -4,9 +4,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DatabaseToolkit.View"
+             xmlns:viewModel="clr-namespace:DatabaseToolkit.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="700">
-    <Grid>
-        <Button Content="nono"/>
+    <UserControl.Resources>
+        <viewModel:SettingsViewModel x:Key="viewModel"/>
+    </UserControl.Resources>
+    <Grid Background="White" DataContext="{StaticResource viewModel}">
+        <StackPanel Margin="10">
+            <Label Content="Left side database:"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Label Content="Address" Width="100"/>
+                <TextBox Text="{Binding LeftDBDatasource}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="User" Width="100"/>
+                <TextBox Text="{Binding LeftDBUser}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Password" Width="100"/>
+                <TextBox Text="{Binding LeftDBPassword}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Catalog" Width="100"/>
+                <TextBox Text="{Binding LeftDBCatalog}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <Label Content="Right side database:"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Label Content="Address" Width="100"/>
+                <TextBox Text="{Binding RightDBDatasource}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="User" Width="100"/>
+                <TextBox Text="{Binding RightDBUser}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Password" Width="100"/>
+                <TextBox Text="{Binding RightDBPassword}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Catalog" Width="100"/>
+                <TextBox Text="{Binding RightDBCatalog}" Margin="2" MinWidth="300" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <Button Content="Save" Width="100" Margin="20" Command="{Binding SaveCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
