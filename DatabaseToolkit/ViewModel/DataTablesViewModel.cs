@@ -15,11 +15,14 @@ namespace DatabaseToolkit.ViewModel
         private ObservableCollection<AssecoStuff> _rightDatabase = new ObservableCollection<AssecoStuff>();
         public ObservableCollection<AssecoStuff> LeftDatabase { get { return _leftDatabase; } set { _leftDatabase = value; } }
         public ObservableCollection<AssecoStuff> RightDatabase { get { return _rightDatabase; } set { _rightDatabase = value; } }
-        private Database _model;
         public CommandHandler CopyFromLeft { get { return new CommandHandler(() => CopyFromLeftCommand(), true); } }
         public CommandHandler CopyFromRight { get { return new CommandHandler(() => CopyFromRightCommand(), true); } }
         private ObservableCollection<AssecoStuff> _selectedItems = new ObservableCollection<AssecoStuff>();
         public ObservableCollection<AssecoStuff> SelectedItems { get { return _selectedItems; } set { _selectedItems = value; } }
+
+        private Database _leftDB;
+        private Database _rightDB;
+        private Settings _settings;
 
         private void CopyFromRightCommand()
         {
@@ -33,8 +36,10 @@ namespace DatabaseToolkit.ViewModel
 
         public DataTablesViewModel()
         {
-            _model = new Database();
-            var leftItems = _model.Read();
+            _settings = new Settings();
+            _settings = _settings.Load("settings.json");
+            _leftDB = new Database();
+            var leftItems = _leftDB.Read();
             foreach (var item in leftItems)
             {
                 LeftDatabase.Add(item);
