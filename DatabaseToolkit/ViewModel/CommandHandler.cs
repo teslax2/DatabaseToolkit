@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace DatabaseToolkit.ViewModel
 {
-    class CommandHandler : ICommand
+    public class CommandHandler : ICommand
     {
         private bool _canExecute;
         private Action<object> _action;

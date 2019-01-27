@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseToolkit.ViewModel
 {
-    class SettingsViewModel
+    public class SettingsViewModel:BindableViewModel
     {
     }
 }

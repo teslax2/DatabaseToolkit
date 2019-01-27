@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace DatabaseToolkit.View
 {
     /// <summary>
-    /// Interaction logic for ParamsView.xaml
+    /// Interaction logic for DataTablesView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class DataTablesView : UserControl
     {
-        public SettingsView()
+        public DataTablesView()
         {
             InitializeComponent();
         }
