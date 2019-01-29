@@ -29,18 +29,19 @@
         </Grid.ColumnDefinitions>
         <ContentControl Content = "{Binding CurrentViewModel}" Grid.Column="1"/>
         <StackPanel Grid.Column="0">
-            <Button  Foreground="{x:Null}" BorderBrush="{x:Null}" Width="30" Height="30" Margin="5" Command="{Binding Navigation}" CommandParameter="settings">
-                <Button.Background>
-                    <ImageBrush ImageSource="/DatabaseToolkit;component/Images/MenuButton.png" Stretch="Uniform"/>
-                </Button.Background>
+            <Button  Foreground="{x:Null}" BorderBrush="{x:Null}" Width="30" Height="40" Margin="5" Command="{Binding Navigation}" CommandParameter="settings">
+                <StackPanel Orientation="Vertical">
+                    <Image Source="/DatabaseToolkit;component/Images/MenuButton.png" Width="20"/>
+                    <Label Content="Settings" FontSize="6" Padding="2,5,0,0" Foreground="#FF352F2F"/>
+                </StackPanel>
             </Button>
-            <Label Content="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="10"/>
-            <Button Foreground="{x:Null}" BorderBrush="{x:Null}" Width="30" Height="30" Margin="5" Command="{Binding Navigation}" CommandParameter="tables">
-                <Button.Background>
-                    <ImageBrush ImageSource="/DatabaseToolkit;component/Images/MenuButton.png" Stretch="Uniform"/>
-                </Button.Background>
+            <Button Foreground="{x:Null}" BorderBrush="{x:Null}" Width="30" Height="40" Margin="5" Command="{Binding Navigation}" CommandParameter="tables">
+                <StackPanel>
+                <Image Source="/DatabaseToolkit;component/Images/MenuButton.png" Width="20"/>
+                <Label Content="Tables" FontSize="6" Padding="2,5,0,0" Foreground="#FF352F2F" />
+                </StackPanel>
             </Button>
-            <Label Content="Tables" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="10"/>
+            
         </StackPanel>
 
     </Grid>

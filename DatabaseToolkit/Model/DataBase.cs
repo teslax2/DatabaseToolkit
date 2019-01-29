@@ -21,6 +21,9 @@ namespace DatabaseToolkit.Model
             _builder.UserID = userID;
             _builder.Password = password;
             _builder.InitialCatalog = initialCatalog;
+            _builder.ConnectTimeout = 2;
+            _builder.ConnectRetryInterval = 2;
+            _builder.AsynchronousProcessing = true;
         }
 
         public Database()
@@ -30,11 +33,19 @@ namespace DatabaseToolkit.Model
             _builder.UserID = "sa";
             _builder.Password = "Strong@Password1";
             _builder.InitialCatalog = "AssecoDB";
+            _builder.ConnectTimeout = 2;
+            _builder.ConnectRetryInterval = 2;
+            _builder.AsynchronousProcessing = true;
         }
 
         public void Create()
         {
             Seed();
+        }
+
+        public async Task CreateAsync()
+        {
+            await SeedAsync();
         }
 
         public int Delete(List<AssecoStuff> data)
@@ -72,6 +83,8 @@ namespace DatabaseToolkit.Model
             {
                 using (var context = new AssecoStuffContext(_builder.ConnectionString))
                 {
+                    if (!context.Database.Exists())
+                        return itemsLoaded;
                     var query = context.AssecoStuffs.ToList();
                     foreach (var item in query)
                     {
@@ -88,14 +101,51 @@ namespace DatabaseToolkit.Model
             }
         }
 
+        public async Task<List<AssecoStuff>> ReadAsync()
+        {
+            var itemsLoaded = new List<AssecoStuff>();
+            try
+            {
+                using (var context = new AssecoStuffContext(_builder.ConnectionString))
+                {
+                    if (await CheckIfDatabaseExistsAsync(context) == false)
+                        return itemsLoaded;
+                    var query = await context.AssecoStuffs.ToListAsync();
+                    foreach (var item in query)
+                    {
+                        itemsLoaded.Add(item);
+                    }
+
+                }
+                return itemsLoaded;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to Read from database", ex);
+                return itemsLoaded;
+            }
+        }
+
+        private async Task<bool> CheckIfDatabaseExistsAsync(DbContext context)
+        {
+            await Task.Run(() => {
+                return context.Database.Exists();
+            });
+            return true;
+        }
+
         public int Seed()
         {
             try
             {
                 var random = new Random();
-                var image = System.IO.File.ReadAllBytes("Bliss.png");
+                var image = System.IO.File.ReadAllBytes("Images/Bliss.bmp");
                 using (var context = new AssecoStuffContext(_builder.ConnectionString))
                 {
+                    if (context.Database.Exists() == false)
+                        return 0;
+                    if (context.AssecoStuffs.Any())
+                        return 0;
                     var items = new List<AssecoStuff>();
                     for (int i = 0; i < 100; i++)
                     {
@@ -103,6 +153,36 @@ namespace DatabaseToolkit.Model
                         context.AssecoStuffs.Add(item);
                     }
                     var affectedRows = context.SaveChanges();
+                    return affectedRows;
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to Seed database", ex);
+                return 0;
+            }
+
+        }
+
+        public async Task<int> SeedAsync()
+        {
+            try
+            {
+                var random = new Random();
+                var image = System.IO.File.ReadAllBytes("Images/Bliss.bmp");
+                using (var context = new AssecoStuffContext(_builder.ConnectionString))
+                {
+                    if (await CheckIfDatabaseExistsAsync(context)==false)
+                        return 0;
+                    if (await context.AssecoStuffs.AnyAsync())
+                        return 0;
+                    var items = new List<AssecoStuff>();
+                    for (int i = 0; i < 100; i++)
+                    {
+                        var item = new AssecoStuff() { Mark = random.Next(1, 6), Ratio = random.NextDouble(), StartTime = DateTime.Now, Description = "Desription " + random.Next().ToString(), Note = "Note " + random.Next().ToString(), Attachment = image };
+                        context.AssecoStuffs.Add(item);
+                    }
+                    var affectedRows = await context.SaveChangesAsync();
                     return affectedRows;
                 }
             }
@@ -126,6 +206,31 @@ namespace DatabaseToolkit.Model
                         context.AssecoStuffs.AddOrUpdate(item);
                     }
                     affectedRows = context.SaveChanges();
+                }
+                return affectedRows;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Failed to copy items", ex);
+                return 0;
+            }
+        }
+
+        public async Task<int> UpdateAsync(List<AssecoStuff> data)
+        {
+            int affectedRows = 0;
+            try
+            {
+                using (var context = new AssecoStuffContext(_builder.ConnectionString))
+                {
+                    if (await CheckIfDatabaseExistsAsync(context)==false)
+                        return affectedRows;
+
+                    foreach (var item in data)
+                    {
+                        context.AssecoStuffs.AddOrUpdate(item);
+                    }
+                    affectedRows = await context.SaveChangesAsync();
                 }
                 return affectedRows;
             }

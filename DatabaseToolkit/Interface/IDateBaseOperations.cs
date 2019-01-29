@@ -12,8 +12,11 @@ namespace DatabaseToolkit.Inteface
     public interface IDateBaseOperations
     {
         void Create();
+        Task CreateAsync();
         int Update(List<AssecoStuff> data);
+        Task<int> UpdateAsync(List<AssecoStuff> data);
         List<AssecoStuff> Read();
+        Task<List<AssecoStuff>> ReadAsync();
         int Delete(List<AssecoStuff> data);
     }
 }

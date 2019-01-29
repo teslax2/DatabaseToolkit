@@ -14,54 +14,62 @@ namespace DatabaseToolkit.ViewModel
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private ObservableCollection<AssecoStuff> _leftDatabase = new ObservableCollection<AssecoStuff>();
         private ObservableCollection<AssecoStuff> _rightDatabase = new ObservableCollection<AssecoStuff>();
-        private int _copiedItems = 0;
-        public int CopiedItems { get { return _copiedItems; } set { _copiedItems = value; OnPropertyChanged("CopiedItems"); } }
+        private int _copiedItemsFromLeft = 0;
+        public int CopiedItemsFromLeft { get { return _copiedItemsFromLeft; } set { _copiedItemsFromLeft = value; OnPropertyChanged("CopiedItemsFromLeft"); } }
+        private int _copiedItemsFromRight = 0;
+        public int CopiedItemsFromRight { get { return _copiedItemsFromRight; } set { _copiedItemsFromRight = value; OnPropertyChanged("CopiedItemsFromRight"); } }
         public ObservableCollection<AssecoStuff> LeftDatabase { get { return _leftDatabase; } set { _leftDatabase = value; } }
         public ObservableCollection<AssecoStuff> RightDatabase { get { return _rightDatabase; } set { _rightDatabase = value; } }
-        public CommandHandler CopyFromLeft { get { return new CommandHandler(selectedRows => CopyFromLeftCommand(selectedRows), true); } }
-        public CommandHandler CopyFromRight { get { return new CommandHandler(selectedRows => CopyFromRightCommand(selectedRows), true); } }
-        public CommandHandler ReloadButton { get { return new CommandHandler(() => ReloadDatabase(), true); } }
+        public CommandHandler CopyFromLeft { get { return new CommandHandler(async(selectedRows) => await CopyFromLeftCommand(selectedRows), true); } }
+        public CommandHandler CopyFromRight { get { return new CommandHandler(async(selectedRows) => await CopyFromRightCommand(selectedRows), true); } }
+        public CommandHandler ReloadButton { get { return new CommandHandler(async() => await ReloadDatabase(), _isReady); } }
+        private bool _isReady = true;
+        public bool IsReady { get { return _isReady; } set { _isReady = value; OnPropertyChanged("IsReady"); } }
 
         private Database _leftDB;
         private Database _rightDB;
         private Settings _settings;
               
-        private void CopyFromRightCommand(object selectedRows)
+        private async Task CopyFromRightCommand(object selectedRows)
         {
             if (selectedRows == null)
                 return;
-            var items = selectedRows as List<AssecoStuff>;
-            CopiedItems=_leftDB.Update(items);
-            UpdateDataGrids();
+            System.Collections.IList items = (System.Collections.IList)selectedRows;
+            var collection = items.Cast<AssecoStuff>();
+            CopiedItemsFromRight =_leftDB.Update(collection.ToList());
+            await UpdateDataGrids();
         }
 
-        private void CopyFromLeftCommand(object selectedRows)
+        private async Task CopyFromLeftCommand(object selectedRows)
         {
             if (selectedRows == null)
                 return;
-            var items = selectedRows as List<AssecoStuff>;
-            CopiedItems=_rightDB.Update(items);
-            UpdateDataGrids();
+            System.Collections.IList items = (System.Collections.IList)selectedRows;
+            var collection = items.Cast<AssecoStuff>();
+            CopiedItemsFromLeft=_rightDB.Update(collection.ToList());
+            await UpdateDataGrids();
         }
 
         public DataTablesViewModel()
         {
-            ReloadDatabase();
+            //ReloadDatabase();
         }
 
-        private void ReloadDatabase()
+        private async Task ReloadDatabase()
         {
             _settings = new Settings();
             var parameters = _settings.Load();
             _leftDB = new Database(parameters.LeftDBDataSource, parameters.LeftDBUser, parameters.LeftDBPassword, parameters.LeftDBCatalog);
             _rightDB = new Database(parameters.RightDBDataSource, parameters.RightDBUser, parameters.RightDBPassword, parameters.RightDBCatalog);
-            UpdateDataGrids();
+            await _leftDB.SeedAsync();
+            await UpdateDataGrids();
         }
 
-        private void UpdateDataGrids()
+        private async Task UpdateDataGrids()
         {
-            var leftItems = _leftDB.Read();
-            var rightItems = _rightDB.Read();
+            IsReady = false;
+            var leftItems = await _leftDB.ReadAsync();
+            var rightItems = await _rightDB.ReadAsync();
             LeftDatabase.Clear();
             foreach (var item in leftItems)
             {
@@ -72,6 +80,7 @@ namespace DatabaseToolkit.ViewModel
             {
                 RightDatabase.Add(item);
             }
+            IsReady = true;
         }
 
     }

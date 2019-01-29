@@ -9,8 +9,9 @@
              d:DesignHeight="450" d:DesignWidth="700">
     <UserControl.Resources>
         <viewModel:DataTablesViewModel x:Key="viewModel"/>
+        <local:BinaryToImageConverter x:Key="imageConverter"/>
     </UserControl.Resources>
-    <Grid DataContext="{StaticResource viewModel}">
+    <Grid DataContext="{StaticResource viewModel}" Visibility="{Binding }">
         <Grid.Background>
             <SolidColorBrush Color="White"/>
         </Grid.Background>
@@ -27,36 +28,79 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1" Grid.Row="2" Width="50" HorizontalAlignment="Center" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,5,5,5" 
-                CommandParameter="{Binding ElementName=LeftDataGrid, Path=SelectedItems}" Command="{Binding CopyFromLeft}">
-            <Button.Background>
-                <ImageBrush ImageSource="/DatabaseToolkit;component/Images/CopyButton.png" Stretch="Uniform">
-                    <ImageBrush.RelativeTransform>
+        <Button Grid.Column="1" Grid.Row="2" Width="100" Height="30"  HorizontalAlignment="Right" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="5,5,25,5" 
+                CommandParameter="{Binding ElementName=LeftDataGrid, Path=SelectedItems}" Command="{Binding CopyFromLeft}" IsEnabled="{Binding IsReady}">
+            <StackPanel Orientation="Horizontal">
+                <Label>Copy</Label>
+                <Image Source="/DatabaseToolkit;component/Images/CopyButton.png" Stretch="Uniform" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
                         <TransformGroup>
-                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                            <RotateTransform Angle="-180" CenterY="0.5" CenterX="0.5"/>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ImageBrush.RelativeTransform>
-                </ImageBrush>
-            </Button.Background>
+                    </Image.RenderTransform>
+                </Image>
+            </StackPanel>
         </Button>
-        <Button Grid.Column="3" Grid.Row="2" Width="50" HorizontalAlignment="Center" Margin="5,5,5,5" BorderBrush="{x:Null}" 
-                CommandParameter="{Binding ElementName=RightDataGrid, Path=SelectedItems}" Command="{Binding CopyFromRight}">
-            <Button.Background>
-                <ImageBrush ImageSource="/DatabaseToolkit;component/Images/CopyButton.png" Stretch="Uniform"/>
-            </Button.Background>
+        <Button Grid.Column="3" Grid.Row="2" Width="100" Height="30" HorizontalAlignment="Left" Margin="25,5,5,5" BorderBrush="{x:Null}" 
+                CommandParameter="{Binding ElementName=RightDataGrid, Path=SelectedItems}" Command="{Binding CopyFromRight}" IsEnabled="{Binding IsReady}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/DatabaseToolkit;component/Images/CopyButton.png" Stretch="Uniform"/>
+                <Label>Copy</Label>
+            </StackPanel>
         </Button>
-        <Button Grid.Column="1" Grid.Row="2" Width="30" Height="30" HorizontalAlignment="Left" BorderBrush="{x:Null}" Command="{Binding ReloadButton}">
-            <Button.Background>
-                <ImageBrush ImageSource="/DatabaseToolkit;component/Images/RefreshButton.png" Stretch="Uniform"/>
-            </Button.Background>
+        <Button Grid.Column="1" Grid.Row="0" Width="100" Height="30" HorizontalAlignment="Left" BorderBrush="{x:Null}" 
+                Command="{Binding ReloadButton}" IsEnabled="{Binding IsReady}" Foreground="{x:Null}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/DatabaseToolkit;component/Images/RefreshButton.png" Stretch="Uniform"/>
+                <Label>Reload</Label>
+            </StackPanel>
         </Button>
-        <Label Content="{Binding CopiedItems}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="1"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Width="80" Height="30" HorizontalAlignment="Left">
+            <Label Content="{Binding CopiedItemsFromLeft}"/>
+            <Label Content="Copied"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="2" Width="80" Height="30" HorizontalAlignment="Right">
+            <Label Content="{Binding CopiedItemsFromRight}"/>
+            <Label Content="Copied"/>
+        </StackPanel>
         <DataGrid x:Name="LeftDataGrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding LeftDatabase}"
-                  Margin="10,10,10,10" SelectionMode="Extended" SelectionUnit="FullRow"/>
+                  Margin="10,10,10,10" SelectionMode="Extended" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Mark" Binding="{Binding Mark}"/>
+                <DataGridTextColumn Header="Ratio" Binding="{Binding Ratio}"/>
+                <DataGridTextColumn Header="StartTime" Binding="{Binding StartTime}"/>
+                <DataGridTextColumn Header="Note" Binding="{Binding Note}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTemplateColumn Header="Attachment">
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Attachment, Converter={StaticResource imageConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <DataGrid x:Name="RightDataGrid" Grid.Column="3" Grid.Row="1" ItemsSource="{Binding RightDatabase}"
-                  Margin="10,10,10,10" SelectionMode="Extended" SelectionUnit="FullRow"/>
+                  Margin="10,10,10,10" SelectionMode="Extended" SelectionUnit="FullRow" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Mark" Binding="{Binding Mark}"/>
+                <DataGridTextColumn Header="Ratio" Binding="{Binding Ratio}"/>
+                <DataGridTextColumn Header="StartTime" Binding="{Binding StartTime}"/>
+                <DataGridTextColumn Header="Note" Binding="{Binding Note}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTemplateColumn Header="Attachment">
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Attachment, Converter={StaticResource imageConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

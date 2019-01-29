@@ -27,7 +27,17 @@ namespace DatabaseToolkit.Model
             try
             {
                 if (!File.Exists(_path))
-                    return new Settings();
+                    return new Settings()
+                    {
+                        LeftDBDataSource = "localhost",
+                        LeftDBUser = "sa",
+                        LeftDBPassword = "Strong@Password1",
+                        LeftDBCatalog = "AssecoDB",
+                        RightDBDataSource = "localhost",
+                        RightDBUser = "sa",
+                        RightDBPassword = "Strong@Password1",
+                        RightDBCatalog = "AssecoDB2"
+                    };
                 var fileContent = System.IO.File.ReadAllText(_path);
                 var settings = JsonConvert.DeserializeObject<Settings>(fileContent);
                 return settings;

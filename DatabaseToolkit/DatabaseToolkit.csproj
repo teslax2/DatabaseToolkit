@@ -75,6 +75,7 @@
     <Compile Include="ViewModel\DataTablesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\BinaryToImageConverter.cs" />
     <Compile Include="View\DataTablesView.xaml.cs">
       <DependentUpon>DataTablesView.xaml</DependentUpon>
     </Compile>
@@ -135,9 +136,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Bliss.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\MenuButton.png" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +143,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\RefreshButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Bliss.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
