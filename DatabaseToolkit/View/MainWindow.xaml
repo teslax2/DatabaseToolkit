@@ -7,7 +7,7 @@
         xmlns:views ="clr-namespace:DatabaseToolkit.View"
         xmlns:viewModels="clr-namespace:DatabaseToolkit.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Database Toolkit" Height="450" Width="800">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
@@ -37,7 +37,7 @@
             </Button>
             <Button Foreground="{x:Null}" BorderBrush="{x:Null}" Width="30" Height="40" Margin="5" Command="{Binding Navigation}" CommandParameter="tables">
                 <StackPanel>
-                <Image Source="/DatabaseToolkit;component/Images/MenuButton.png" Width="20"/>
+                <Image Source="/DatabaseToolkit;component/Images/DatabaseButton.png" Width="20"/>
                 <Label Content="Tables" FontSize="6" Padding="2,5,0,0" Foreground="#FF352F2F" />
                 </StackPanel>
             </Button>

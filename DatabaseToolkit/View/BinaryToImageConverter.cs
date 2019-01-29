@@ -10,8 +10,8 @@ namespace DatabaseToolkit.View
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is byte[]))
-                value = new byte[] { 0 };
+            //if (!(value is byte[]))
+              //  value = new byte[] { 0 };
             byte[] obj = (byte[])value;
             BitmapImage x = LoadImage(obj);
             return x;

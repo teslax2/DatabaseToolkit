@@ -194,7 +194,7 @@ namespace DatabaseToolkit.Model
 
         }
 
-        public int Update(List<AssecoStuff> data)
+        public int Update(List<AssecoStuff> data, bool AddOrUpdate)
         {
             int affectedRows;
             try
@@ -203,7 +203,10 @@ namespace DatabaseToolkit.Model
                 {
                     foreach (var item in data)
                     {
-                        context.AssecoStuffs.AddOrUpdate(item);
+                        if (AddOrUpdate)
+                            context.AssecoStuffs.AddOrUpdate(item);
+                        else
+                            context.AssecoStuffs.Add(item);
                     }
                     affectedRows = context.SaveChanges();
                 }
@@ -216,7 +219,7 @@ namespace DatabaseToolkit.Model
             }
         }
 
-        public async Task<int> UpdateAsync(List<AssecoStuff> data)
+        public async Task<int> UpdateAsync(List<AssecoStuff> data, bool AddOrUpdate)
         {
             int affectedRows = 0;
             try
@@ -228,7 +231,10 @@ namespace DatabaseToolkit.Model
 
                     foreach (var item in data)
                     {
-                        context.AssecoStuffs.AddOrUpdate(item);
+                        if (AddOrUpdate)
+                            context.AssecoStuffs.AddOrUpdate(item);
+                        else
+                            context.AssecoStuffs.Add(item);
                     }
                     affectedRows = await context.SaveChangesAsync();
                 }

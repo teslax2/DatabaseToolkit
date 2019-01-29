@@ -13,8 +13,8 @@ namespace DatabaseToolkit.Inteface
     {
         void Create();
         Task CreateAsync();
-        int Update(List<AssecoStuff> data);
-        Task<int> UpdateAsync(List<AssecoStuff> data);
+        int Update(List<AssecoStuff> data, bool AddOrUpdate);
+        Task<int> UpdateAsync(List<AssecoStuff> data, bool AddOrUpdate);
         List<AssecoStuff> Read();
         Task<List<AssecoStuff>> ReadAsync();
         int Delete(List<AssecoStuff> data);

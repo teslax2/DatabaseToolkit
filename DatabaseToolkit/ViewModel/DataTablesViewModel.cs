@@ -36,7 +36,8 @@ namespace DatabaseToolkit.ViewModel
                 return;
             System.Collections.IList items = (System.Collections.IList)selectedRows;
             var collection = items.Cast<AssecoStuff>();
-            CopiedItemsFromRight =_leftDB.Update(collection.ToList());
+            CopiedItemsFromRight = await _leftDB.UpdateAsync(collection.ToList(),false);
+            CopiedItemsFromLeft = 0;
             await UpdateDataGrids();
         }
 
@@ -46,13 +47,13 @@ namespace DatabaseToolkit.ViewModel
                 return;
             System.Collections.IList items = (System.Collections.IList)selectedRows;
             var collection = items.Cast<AssecoStuff>();
-            CopiedItemsFromLeft=_rightDB.Update(collection.ToList());
+            CopiedItemsFromLeft=await _rightDB.UpdateAsync(collection.ToList(),false);
+            CopiedItemsFromRight = 0;
             await UpdateDataGrids();
         }
 
         public DataTablesViewModel()
         {
-            //ReloadDatabase();
         }
 
         private async Task ReloadDatabase()
