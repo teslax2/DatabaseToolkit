@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DatabaseToolkit.Model
 {
@@ -70,33 +72,7 @@ namespace DatabaseToolkit.Model
             {
                 using (var context = new AssecoStuffContext(_builder.ConnectionString))
                 {
-                    var query = from q in context.AssecoStuffs
-                                 select q;
-                    foreach (var item in query)
-                    {
-                        itemsLoaded.Add(item);
-                    }
-
-                }
-                return itemsLoaded;
-            }
-            catch (Exception ex)
-            {
-                _log.Error("Failed to Read from database", ex);
-                return itemsLoaded;
-            }
-        }
-
-        public List<AssecoStuff> Read(IDatabaseFilter filter)
-        {
-            var itemsLoaded = new List<AssecoStuff>();
-            try
-            {
-                using (var context = new AssecoStuffContext(_builder.ConnectionString))
-                {
-                    var query = from q in context.AssecoStuffs
-                                where q.Mark == filter.Mark
-                                select q;
+                    var query = context.AssecoStuffs.ToList();
                     foreach (var item in query)
                     {
                         itemsLoaded.Add(item);
@@ -137,7 +113,7 @@ namespace DatabaseToolkit.Model
             }
 
         }
-        
+
         public int Update(List<AssecoStuff> data)
         {
             int affectedRows;
@@ -159,7 +135,6 @@ namespace DatabaseToolkit.Model
                 return 0;
             }
         }
-
 
     }
 }

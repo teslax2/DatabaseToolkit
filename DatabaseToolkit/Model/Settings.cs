@@ -20,14 +20,15 @@ namespace DatabaseToolkit.Model
         public string RightDBPassword { get; set; }
         public string RightDBCatalog { get; set; }
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly string _path = "settings.json";
 
-        public Settings Load(string path)
+        public Settings Load()
         {
             try
             {
-                if (!File.Exists(path))
+                if (!File.Exists(_path))
                     return new Settings();
-                var fileContent = System.IO.File.ReadAllText(path);
+                var fileContent = System.IO.File.ReadAllText(_path);
                 var settings = JsonConvert.DeserializeObject<Settings>(fileContent);
                 return settings;
             }
@@ -38,12 +39,12 @@ namespace DatabaseToolkit.Model
             }
         }
 
-        public bool Save(Settings data, string path)
+        public bool Save(Settings data)
         {
             try
             {
                 var serializedObject = JsonConvert.SerializeObject(data);
-                File.WriteAllText(path, serializedObject);
+                File.WriteAllText(_path, serializedObject);
                 return true;
             }
             catch (Exception ex)
@@ -51,8 +52,6 @@ namespace DatabaseToolkit.Model
                 _log.Error("Failed to save settings", ex);
                 return false;
             }
-            
-
         }
     }
 }

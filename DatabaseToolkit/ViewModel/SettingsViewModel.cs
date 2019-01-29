@@ -24,12 +24,12 @@ namespace DatabaseToolkit.ViewModel
 
         private void SaveSettings()
         {
-            _settings.Save(_settings, "settings.json");
+            _settings.Save(_settings);
         }
 
         private void LoadSettings()
         {
-            _settings = _settings.Load("settings.json");
+            _settings = _settings.Load();
         }
 
         public SettingsViewModel()

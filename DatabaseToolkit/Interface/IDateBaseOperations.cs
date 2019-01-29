@@ -14,7 +14,6 @@ namespace DatabaseToolkit.Inteface
         void Create();
         int Update(List<AssecoStuff> data);
         List<AssecoStuff> Read();
-        List<AssecoStuff> Read(IDatabaseFilter filter);
         int Delete(List<AssecoStuff> data);
     }
 }
